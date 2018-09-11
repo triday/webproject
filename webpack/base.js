@@ -5,7 +5,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-const devMode = true;
+const devMode = process.env.NODE_ENV !== 'production';
 const output_dir = "dist";
 const output_path=path.resolve(__dirname, '..', output_dir);
 module.exports = {
@@ -52,7 +52,12 @@ module.exports = {
                     'css-loader',
                     'postcss-loader'
                 ]
-            }
+            },
+            {
+                test: /\.tsx?$/,
+                use: 'ts-loader',
+                exclude: /node_modules/
+              }
         ]
     },
     plugins: [

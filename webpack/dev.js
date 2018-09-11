@@ -9,5 +9,10 @@ module.exports = merge(common, {
         host: '127.0.0.1',
         compress: false,
         port: 8080
-    }
+    },
+    plugins: [
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify('development')
+        })
+    ]
 });
