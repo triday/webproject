@@ -1,0 +1,81 @@
+const path = require('path');
+const webpack = require('webpack');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
+const devMode = true;
+const output_dir = "dist";
+const output_path=path.resolve(__dirname, '..', output_dir);
+module.exports = {
+    entry: {
+        'index': './src/index.js'
+    },
+    output: {
+        filename: '[name].bundle.js',
+        path: output_path
+    },
+    resolve: {
+        extensions: ['.tsx', '.ts', '.js']
+    },
+    module: {
+        rules: [
+            {
+                test: /\.(png|svg|jpg|gif)$/,
+                use: [
+                    'file-loader'
+                ]
+            },
+            {
+                test: /\.(woff|woff2|eot|ttf|otf)$/,
+                use: [
+                    'file-loader'
+                ]
+            },
+            {
+                test: /\.(csv|tsv)$/,
+                use: [
+                    'csv-loader'
+                ]
+            },
+            {
+                test: /\.xml$/,
+                use: [
+                    'xml-loader'
+                ]
+            },
+            {
+                test: /\.(sa|sc|c)ss$/,
+                use: [
+                    devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    'postcss-loader'
+                ]
+            }
+        ]
+    },
+    plugins: [
+        new webpack.LoaderOptionsPlugin({ debug: true }),
+        new CleanWebpackPlugin([output_dir], {
+            root: path.resolve(__dirname, '..')
+        }),
+
+        new MiniCssExtractPlugin({
+            filename: devMode ? '[name].css' : '[name].[hash].css',
+            chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
+        }),
+        new HtmlWebpackPlugin({
+            title: 'WebProject',
+            favicon: './src/images/favicon.ico',
+            template: './src/template/index.html'
+        }),
+        new CopyWebpackPlugin([{
+            from: path.resolve(__dirname , '../src/statics'),
+            to: output_path
+        }]
+
+        )
+    ]
+
+};
