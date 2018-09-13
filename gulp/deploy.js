@@ -46,3 +46,37 @@ gulp.task('deploy-dev',['clean','zip-dev'],()=>{
 gulp.task('deploy-prod',['clean', 'zip-prod'],()=>{
     log('do prod deploy ...');
 });
+    .pipe(ftp({
+      host: '127.0.0.1',
+      port: 21,
+      user: 'yangpengbo',
+      pass:'yangsi271828@',
+      remotePath: "/"
+    }));
+});
+gulp.task('deploy-dev', (cb) => {
+    log('do dev deploy ...');
+    return sequence('clean','zip-dev','ftp',cb);
+});
+gulp.task('deploy-prod', (cb) => {
+    log('do prod deploy ...');
+    return sequence('clean','zip-prod','ftp',cb);
+});
+
+function dateFtt(fmt, date) {
+    var o = {
+        "M+": date.getMonth() + 1,                 //月份   
+        "d+": date.getDate(),                    //日   
+        "h+": date.getHours(),                   //小时   
+        "m+": date.getMinutes(),                 //分   
+        "s+": date.getSeconds(),                 //秒   
+        "q+": Math.floor((date.getMonth() + 3) / 3), //季度   
+        "S": date.getMilliseconds()             //毫秒   
+    };
+    if (/(y+)/.test(fmt))
+        fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+        if (new RegExp("(" + k + ")").test(fmt))
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
+} 
