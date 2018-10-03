@@ -1,14 +1,20 @@
 const gulp = require('gulp');
-const path = require('path');
 const clean = require('gulp-clean');
 
 gulp.task('clean-deploy', function () {
-    return cleanDir('deploy/*');
+    return cleanByPattern('deploy');
 });
 gulp.task('clean-dist', function () {
-    return cleanDir('dist/*');
+    return cleanByPattern('dist');
 });
-function cleanDir(src) {
-    return gulp.src([src], { read: false })
+gulp.task('clean-d-ts',function(){
+    return cleanByPattern('src/**/*.*ss.d.ts')
+});
+
+gulp.task('clean-all',['clean-deploy','clean-dist','clean-d-ts'],function(){
+
+})
+function cleanByPattern (pattern) {
+    return gulp.src([pattern], { read: false })
         .pipe(clean());
 }

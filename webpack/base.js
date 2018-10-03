@@ -10,7 +10,8 @@ const output_dir = "dist";
 const output_path=path.resolve(__dirname, '..', output_dir);
 module.exports = {
     entry: {
-        'index': './src/index.js'
+        'abc':'./src/index.js',
+        'index': './src/entry.tsx',
     },
     output: {
         filename: '[name].bundle.js',
@@ -21,6 +22,7 @@ module.exports = {
     },
     module: {
         rules: [
+            { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
             {
                 test: /\.(png|svg|jpg|gif)$/,
                 use: [
@@ -60,7 +62,6 @@ module.exports = {
         ]
     },
     plugins: [
-        new webpack.LoaderOptionsPlugin({ debug: true }),
         new CleanWebpackPlugin([output_dir], {
             root: path.resolve(__dirname, '..')
         }),
@@ -71,6 +72,7 @@ module.exports = {
         }),
         new HtmlWebpackPlugin({
             title: 'WebProject',
+            minify: false,
             favicon: './src/images/favicon.ico',
             template: './src/template/index.html'
         }),

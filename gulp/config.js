@@ -69,7 +69,7 @@ const inputSchemas = [
 ]
 
 
-gulp.task('config-user-init', function () {
+gulp.task('init-user-config', function () {
     let allConfig = {}
     if (fs.existsSync(configFile)) {
         Object.assign(allConfig, JSON.parse(fs.readFileSync(configFile)));
